@@ -29,9 +29,6 @@ jobs:
           mkdir -p "$ANDROID_SDK/cmdline-tools/latest"
           mv /tmp/cmdline/cmdline-tools/* "$ANDROID_SDK/cmdline-tools/latest/"
 
-          # Accept licenses and install required packages (adjust platform/build-tools version if needed)
-          yes | "$ANDROID_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_SDK" --licenses
-          "$ANDROID_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_SDK" "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2

@@ -184,7 +184,7 @@ android.permissions = INTERNET,VIBRATE
 #android.ndk_arch =
 
 # (bool) enables Android auto backup feature (Android API >=23)
-android.allow_backup = True
+
 
 # (str) XML file for custom backup rules (see official auto backup documentation)
 #android.backup_rules =

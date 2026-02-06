@@ -1,4 +1,3 @@
-
 on:
   push:
     branches: [ main ]
@@ -8,6 +7,31 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Android SDK commandline tools and build-tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip wget openjdk-11-jdk
+          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+          ANDROID_SDK="$HOME/.buildozer/android/platform/android-sdk"
+
+          # create sdk folder where Buildozer expects it
+          mkdir -p "$ANDROID_SDK"
+
+          # download and install commandline tools
+          TMPZIP=/tmp/cmdline.zip
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O $TMPZIP
+          mkdir -p /tmp/cmdline
+          unzip -q $TMPZIP -d /tmp/cmdline
+
+          # place cmdline-tools in the expected layout
+          mkdir -p "$ANDROID_SDK/cmdline-tools/latest"
+          mv /tmp/cmdline/cmdline-tools/* "$ANDROID_SDK/cmdline-tools/latest/"
+
+          # Accept licenses and install required packages (adjust platform/build-tools version if needed)
+          yes | "$ANDROID_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_SDK" --licenses
+          "$ANDROID_SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_SDK" "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
